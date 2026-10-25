@@ -30,6 +30,10 @@ jobs:
       run: |
         pyinstaller main.spec
 
+    - name: Copy Icon to Output Folder
+      run: |
+        copy icon.ico dist\KishkaBrowser\icon.ico
+
     - name: Install Inno Setup
       run: |
         choco install innosetup -y
