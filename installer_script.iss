@@ -3,6 +3,7 @@ AppName=Kishka Browser
 AppVersion=1.0
 DefaultDirName={autopf}\KishkaBrowser
 DefaultGroupName=Kishka Browser
+DisableDirPage=no
 UninstallDisplayIcon={app}\main.exe
 Compression=lzma2
 SolidCompression=yes
