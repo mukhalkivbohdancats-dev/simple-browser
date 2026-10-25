@@ -6,8 +6,8 @@ DefaultGroupName=Kishka Browser
 UninstallDisplayIcon={app}\main.exe
 Compression=lzma2
 SolidCompression=yes
-OutputDir=Output
-OutputBaseFilename=KishkaBrowser_Setup
+OutputDir=exe
+OutputBaseFilename=Kishka-Browser-Installer
 SetupIconFile=icon.ico
 
 [Tasks]
