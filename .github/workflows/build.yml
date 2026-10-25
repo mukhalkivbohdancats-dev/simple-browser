@@ -46,4 +46,4 @@ jobs:
       uses: stefanzweifel/git-auto-commit-action@v5
       with:
         commit_message: "Auto-update Kishka-Browser-Installer_V1.1.exe [skip ci]"
-        file_pattern: exe/Kishka-Browser-Installer_V1.1.exe
+        file_pattern: exe/Kishka-Browser-Installer_V1.2.exe
