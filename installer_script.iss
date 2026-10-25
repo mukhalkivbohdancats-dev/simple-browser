@@ -1,6 +1,6 @@
 [Setup]
 AppName=Kishka Browser
-AppVersion=1.1
+AppVersion=1.2
 DefaultDirName={autopf}\KishkaBrowser_New
 DefaultGroupName=Kishka Browser New
 DisableDirPage=no
