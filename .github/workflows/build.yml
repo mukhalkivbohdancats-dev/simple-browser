@@ -23,9 +23,9 @@ jobs:
         pip install -r requirements.txt
         pip install pyinstaller
 
-    - name: Build EXE with PyInstaller
+    - name: Build EXE with PyInstaller using Spec
       run: |
-        pyinstaller --noconsole --onedir --icon=icon.ico --collect-all PyQt5 --collect-all PyQtWebEngine main.py
+        pyinstaller main.spec
 
     - name: Copy Icon to Output Folder
       run: |
