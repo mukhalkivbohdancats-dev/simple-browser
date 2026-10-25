@@ -35,8 +35,10 @@ pyz = PYZ(a.pure, a.zipped_data, cipher=None)
 exe = EXE(
     pyz,
     a.scripts,
+    a.binaries,
+    a.zipfiles,
+    a.datas,
     [],
-    exclude_binaries=True,
     name='KishkaBrowser',
     debug=False,
     bootloader_ignore_signals=False,
@@ -47,14 +49,4 @@ exe = EXE(
     argv_emulation=False,
     target_arch=None,
     icon='icon.ico',
-)
-coll = COLLECT(
-    exe,
-    a.binaries,
-    a.zipfiles,
-    a.datas,
-    strip=False,
-    upx=True,
-    upx_exclude=[],
-    name='KishkaBrowser',
 )
