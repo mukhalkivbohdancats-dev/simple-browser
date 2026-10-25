@@ -34,6 +34,10 @@ jobs:
       run: |
         choco install innosetup -y
 
+    - name: Create exe directory
+      run: |
+        mkdir exe
+
     - name: Compile Installer Setup.exe
       shell: cmd
       run: "\"C:\\Program Files (x86)\\Inno Setup 6\\ISCC.exe\" installer_script.iss"
