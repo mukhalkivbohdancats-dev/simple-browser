@@ -1,14 +1,14 @@
 [Setup]
 AppName=Kishka Browser
 AppVersion=1.1
-DefaultDirName={autopf}\KishkaBrowser
-DefaultGroupName=Kishka Browser
+DefaultDirName={autopf}\KishkaBrowser_New
+DefaultGroupName=Kishka Browser New
 DisableDirPage=no
-UninstallDisplayIcon={app}\main.exe
+UninstallDisplayIcon={app}\KishkaBrowser.exe
 Compression=lzma2
 SolidCompression=yes
 OutputDir=exe
-OutputBaseFilename=Kishka-Browser-Installer_V1.1
+OutputBaseFilename=Kishka-Browser-Installer_V1.2
 SetupIconFile=icon.ico
 PrivilegesRequired=lowest
 
@@ -16,12 +16,11 @@ PrivilegesRequired=lowest
 Name: "desktopicon"; Description: "Створити ярлик на робочому столі"; GroupDescription: "Додатково:"
 
 [Files]
-; Повне перезаписування старих файлів, щоб не залишалося сміття
-Source: "dist\main\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs confirmoverwrite
+Source: "dist\KishkaBrowser\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs confirmoverwrite
 
 [Icons]
-Name: "{group}\Kishka Browser"; Filename: "{app}\main.exe"; IconFilename: "{app}\icon.ico"
-Name: "{autodesktop}\Kishka Browser"; Filename: "{app}\main.exe"; IconFilename: "{app}\icon.ico"; Tasks: desktopicon
+Name: "{group}\Kishka Browser"; Filename: "{app}\KishkaBrowser.exe"; IconFilename: "{app}\icon.ico"
+Name: "{autodesktop}\Kishka Browser"; Filename: "{app}\KishkaBrowser.exe"; IconFilename: "{app}\icon.ico"; Tasks: desktopicon
 
 [Run]
-Filename: "{app}\main.exe"; Description: "Запустити Kishka Browser"; Flags: postinstall nowait skipifsilent
+Filename: "{app}\KishkaBrowser.exe"; Description: "Запустити Kishka Browser"; Flags: postinstall nowait skipifsilent
