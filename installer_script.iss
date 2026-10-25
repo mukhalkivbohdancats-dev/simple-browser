@@ -10,12 +10,14 @@ SolidCompression=yes
 OutputDir=exe
 OutputBaseFilename=Kishka-Browser-Installer
 SetupIconFile=icon.ico
+PrivilegesRequired=lowest
 
 [Tasks]
 Name: "desktopicon"; Description: "Створити ярлик на робочому столі"; GroupDescription: "Додатково:"
 
 [Files]
-Source: "dist\main\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+; Повне перезаписування старих файлів, щоб не залишалося сміття від старої версії
+Source: "dist\main\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs confirmoverwrite
 
 [Icons]
 Name: "{group}\Kishka Browser"; Filename: "{app}\main.exe"; IconFilename: "{app}\icon.ico"
