@@ -34,10 +34,6 @@ jobs:
       run: |
         copy icon.ico dist\main\icon.ico
 
-    - name: Create exe Directory
-      run: |
-        if not exist exe mkdir exe
-
     - name: Install Inno Setup
       run: |
         choco install innosetup -y
