@@ -1,0 +1,22 @@
+body { 
+    margin: 0; padding: 0; 
+    font-family: 'Segoe UI', Tahoma, sans-serif; 
+    background: #2b2b2b; color: white;
+    display: flex; justify-content: center; align-items: center; height: 100vh; 
+}
+.container { 
+    background: #3c3f41; padding: 40px; border-radius: 15px; 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5); text-align: center; 
+    width: 80%; max-width: 500px;
+}
+h1 { margin-top: 0; color: #ff9800; }
+input { 
+    width: 90%; padding: 12px; margin: 15px 0; 
+    border: none; border-radius: 8px; font-size: 16px;
+}
+button { 
+    padding: 12px 30px; background: #ff9800; color: black; 
+    font-weight: bold; border: none; border-radius: 8px; 
+    cursor: pointer; font-size: 16px;
+}
+button:hover { background: #e68a00; }
