@@ -9,14 +9,16 @@ AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 AppPublisher={#MyAppPublisher}
 
-; ⬇️ ЗМІНЕНО ШЛЯХ ЗА ЗАМОВЧУВАННЯМ ⬇️
+; Шлях за замовчуванням
 DefaultDirName=C:\Kishka Browser
 DefaultGroupName={#MyAppName}
 
-; ⬇️ ДОЗВОЛЯЄМО ІНСТАЛЯТОРУ ПИТАТИ ПРО ВСЕ ⬇️
+; Дозволяємо інсталятору питати про папку та меню "Пуск"
 DisableDirPage=no
 DisableProgramGroupPage=no
-DisableTasksPage=no
+
+; УВАГА: Рядок DisableTasksPage=no видалено, оскільки такої директиви не існує.
+; Сторінка завдань з'явиться автоматично завдяки секції [Tasks] нижче.
 
 OutputDir=installer
 OutputBaseFilename=Kishka-Browser_V1.4_Setup
@@ -32,7 +34,7 @@ UninstallDisplayName={#MyAppName} {#MyAppVersion}
 Name: "ukrainian"; MessagesFile: "compiler:Languages\Ukrainian.isl"
 
 [Tasks]
-; ⬇️ ПИТАННЯ ПРО ЯРЛИК НА РОБОЧОМУ СТОЛІ ⬇️
+; Питання про ярлик на робочому столі
 Name: "desktopicon"; Description: "Створити ярлик на робочому столі"; GroupDescription: "Додаткові ярлики:"; Flags: checkedonce
 
 [Files]
