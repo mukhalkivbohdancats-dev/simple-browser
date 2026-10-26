@@ -1,8 +1,9 @@
 import sys
 import os
+import traceback
 from PyQt5.QtCore import QUrl
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QToolBar, QLineEdit,
-                             QAction, QTabWidget, QStatusBar, QFileDialog)
+                             QAction, QTabWidget, QStatusBar, QFileDialog, QMessageBox)
 from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEngineProfile
 from PyQt5.QtGui import QIcon
 
@@ -16,14 +17,27 @@ def resource_path(relative_path):
 DOWNLOAD_DIR = r"C:\Kishka Browser\Downloads"
 os.makedirs(DOWNLOAD_DIR, exist_ok=True)
 
+def global_exception_handler(exc_type, exc_value, exc_traceback):
+    err_msg = "".join(traceback.format_exception(exc_type, exc_value, exc_traceback))
+    msg = QMessageBox()
+    msg.setIcon(QMessageBox.Critical)
+    msg.setWindowTitle("Помилка Kishka Browser")
+    msg.setText("Сталася помилка при запуску або роботі:")
+    msg.setDetailedText(err_msg)
+    msg.exec_()
+    sys.exit(1)
+
+sys.excepthook = global_exception_handler
+
 class Browser(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Kishka Browser V1.4")
+        self.setWindowTitle("Kishka Browser V1.5")
         self.setWindowIcon(QIcon(resource_path("icon.ico")))
         self.resize(1200, 800)
 
         self.profile = QWebEngineProfile.defaultProfile()
+        # Імітуємо ПК
         self.profile.setHttpUserAgent(
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
             "AppleWebKit/537.36 (KHTML, like Gecko) "
@@ -71,14 +85,15 @@ class Browser(QMainWindow):
         self.status = QStatusBar()
         self.setStatusBar(self.status)
 
-        self.add_tab(QUrl("https://www.google.com"), "Старт")
+        # ЗМІНЕНО: Стартова сторінка - DuckDuckGo (без сервісів Google)
+        self.add_tab(QUrl("https://duckduckgo.com"), "Старт")
 
     def current_browser(self):
         return self.tabs.currentWidget()
 
     def add_tab(self, qurl=None, label="Нова вкладка"):
         if qurl is None:
-            qurl = QUrl("https://www.google.com")
+            qurl = QUrl("https://duckduckgo.com")
         browser = QWebEngineView()
         browser.setUrl(qurl)
         i = self.tabs.addTab(browser, label)
@@ -101,14 +116,15 @@ class Browser(QMainWindow):
         self.setWindowTitle(f"{self.tabs.tabText(i)} — Kishka Browser")
 
     def navigate_home(self):
-        self.current_browser().setUrl(QUrl("https://www.google.com"))
+        self.current_browser().setUrl(QUrl("https://duckduckgo.com"))
 
     def navigate_to_url(self):
         text = self.urlbar.text().strip()
         if not text:
             return
         if "." not in text and "://" not in text:
-            text = "https://www.google.com/search?q=" + text
+            # ЗМІНЕНО: Пошук через DuckDuckGo
+            text = "https://duckduckgo.com/?q=" + text
         q = QUrl(text)
         if q.scheme() == "":
             q.setScheme("https")
@@ -122,8 +138,7 @@ class Browser(QMainWindow):
 
     def handle_download(self, item):
         path, _ = QFileDialog.getSaveFileName(
-            self,
-            "Зберегти файл",
+            self, "Зберегти файл",
             os.path.join(DOWNLOAD_DIR, item.downloadFileName()),
             "All Files (*.*)"
         )
