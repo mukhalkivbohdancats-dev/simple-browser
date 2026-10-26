@@ -9,16 +9,11 @@ AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 AppPublisher={#MyAppPublisher}
 
-; Шлях за замовчуванням
 DefaultDirName=C:\Kishka Browser
 DefaultGroupName={#MyAppName}
 
-; Дозволяємо інсталятору питати про папку та меню "Пуск"
 DisableDirPage=no
 DisableProgramGroupPage=no
-
-; УВАГА: Рядок DisableTasksPage=no видалено, оскільки такої директиви не існує.
-; Сторінка завдань з'явиться автоматично завдяки секції [Tasks] нижче.
 
 OutputDir=installer
 OutputBaseFilename=Kishka-Browser_V1.4_Setup
@@ -34,21 +29,17 @@ UninstallDisplayName={#MyAppName} {#MyAppVersion}
 Name: "ukrainian"; MessagesFile: "compiler:Languages\Ukrainian.isl"
 
 [Tasks]
-; Питання про ярлик на робочому столі
 Name: "desktopicon"; Description: "Створити ярлик на робочому столі"; GroupDescription: "Додаткові ярлики:"; Flags: checkedonce
 
 [Files]
-; Тільки іконка (важкий exe завантажиться під час встановлення)
 Source: "icon.ico"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
-; Ярлики створюються на основі того, що обрав користувач
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; IconFilename: "{app}\icon.ico"
 Name: "{group}\Видалити {#MyAppName}"; Filename: "{uninstallexe}"
 Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; IconFilename: "{app}\icon.ico"; Tasks: desktopicon
 
 [Dirs]
-; Створюємо папку для завантажень
 Name: "C:\Kishka Browser\Downloads"; Permissions: users-full; Flags: uninsneveruninstall
 
 [Run]
@@ -60,8 +51,6 @@ var
 
 function OnDownloadProgress(const Url, FileName: String; const Progress, ProgressMax: Int64): Boolean;
 begin
-  if Progress = ProgressMax then
-    Log(Format('Успішно завантажено: %s', [FileName]));
   Result := True;
 end;
 
@@ -72,31 +61,35 @@ end;
 
 function NextButtonClick(CurPageID: Integer): Boolean;
 begin
+  Result := True;
   if CurPageID = wpReady then begin
     DownloadPage.Clear;
-    // Посилання на ваш EXE у GitHub Releases
     DownloadPage.Add('https://github.com/mukhalkivbohdancats-dev/simple-browser/releases/download/v1.4/Kishka-Browser_V1.4.exe', 'Kishka-Browser_V1.4.exe', '');
     DownloadPage.Show;
     try
       try
         DownloadPage.Download;
-        Result := True;
       except
-        SuppressibleMsgBox(AddPeriod(GetExceptionMessage), mbCriticalError, MB_OK, IDOK);
+        MsgBox('Помилка завантаження: ' + GetExceptionMessage + #13#10 + 
+               'Перевірте інтернет або вимкніть антивірус.', mbCriticalError, MB_OK);
         Result := False;
       end;
     finally
       DownloadPage.Hide;
     end;
-  end else
-    Result := True;
+  end;
 end;
 
 procedure CurStepChanged(CurStep: TSetupStep);
 begin
   if CurStep = ssPostInstall then
   begin
-    // Переносимо завантажений exe у ту папку, яку обрав користувач
-    FileCopy(ExpandConstant('{tmp}\Kishka-Browser_V1.4.exe'), ExpandConstant('{app}\Kishka-Browser_V1.4.exe'), False);
+    if FileExists(ExpandConstant('{tmp}\Kishka-Browser_V1.4.exe')) then
+    begin
+      FileCopy(ExpandConstant('{tmp}\Kishka-Browser_V1.4.exe'), ExpandConstant('{app}\Kishka-Browser_V1.4.exe'), False);
+    end else
+    begin
+      MsgBox('Помилка: Файл не було завантажено! Можливо, його заблокував антивірус.', mbError, MB_OK);
+    end;
   end;
 end;
