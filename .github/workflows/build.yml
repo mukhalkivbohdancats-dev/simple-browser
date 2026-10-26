@@ -31,8 +31,8 @@ jobs:
     - name: Upload EXE to GitHub Releases
       uses: softprops/action-gh-release@v1
       with:
-        tag_name: v1.4
-        files: dist/Kishka-Browser_V1.4.exe
+        tag_name: v1.5
+        files: dist/Kishka-Browser_V1.5.exe
         overwrite: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -47,5 +47,5 @@ jobs:
     - name: Upload Installer Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: Kishka-Browser-V1.4-Setup
-        path: installer/Kishka-Browser_V1.4_Setup.exe
+        name: Kishka-Browser-V1.5-Setup
+        path: installer/Kishka-Browser_V1.5_Setup.exe
