@@ -23,8 +23,8 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    # ---------- 1. Збірка портативного .exe ----------
-    - name: Build portable EXE with PyInstaller
+    # ---------- Крок 1. Збірка .exe (потрібен лише як "начинка" для інсталятора) ----------
+    - name: Build EXE with PyInstaller
       run: |
         pyinstaller --noconfirm --onefile --windowed ^
           --icon=icon.ico ^
@@ -32,22 +32,16 @@ jobs:
           --add-data "icon.ico;." ^
           main.py
 
-    # ---------- 2. Встановлення Inno Setup ----------
+    # ---------- Крок 2. Встановлення Inno Setup ----------
     - name: Install Inno Setup
       run: choco install innosetup --no-progress -y
 
-    # ---------- 3. Збірка інсталятора ----------
+    # ---------- Крок 3. Збірка інсталятора ----------
     - name: Build Installer with Inno Setup
       run: |
         & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" installer.iss
 
-    # ---------- 4. Вивантаження артефактів ----------
-    - name: Upload Portable EXE
-      uses: actions/upload-artifact@v4
-      with:
-        name: Kishka-Browser-V1.4-Portable
-        path: dist/Kishka-Browser_V1.4.exe
-
+    # ---------- Крок 4. Вивантаження ТІЛЬКИ інсталятора ----------
     - name: Upload Installer
       uses: actions/upload-artifact@v4
       with:
