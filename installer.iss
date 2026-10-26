@@ -1,22 +1,19 @@
 #define MyAppName "Kishka Browser"
-#define MyAppVersion "1.4"
+#define MyAppVersion "1.5"
 #define MyAppPublisher "Kishka"
-#define MyAppExeName "Kishka-Browser_V1.4.exe"
+#define MyAppExeName "Kishka-Browser_V1.5.exe"
 
 [Setup]
 AppId={{8A7B5C3D-1E4F-4A2B-9C3D-K1SHKA00001}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 AppPublisher={#MyAppPublisher}
-
 DefaultDirName=C:\Kishka Browser
 DefaultGroupName={#MyAppName}
-
 DisableDirPage=no
 DisableProgramGroupPage=no
-
 OutputDir=installer
-OutputBaseFilename=Kishka-Browser_V1.4_Setup
+OutputBaseFilename=Kishka-Browser_V1.5_Setup
 SetupIconFile=icon.ico
 Compression=lzma2/ultra64
 SolidCompression=yes
@@ -64,14 +61,13 @@ begin
   Result := True;
   if CurPageID = wpReady then begin
     DownloadPage.Clear;
-    DownloadPage.Add('https://github.com/mukhalkivbohdancats-dev/simple-browser/releases/download/v1.4/Kishka-Browser_V1.4.exe', 'Kishka-Browser_V1.4.exe', '');
+    DownloadPage.Add('https://github.com/mukhalkivbohdancats-dev/simple-browser/releases/download/v1.5/Kishka-Browser_V1.5.exe', 'Kishka-Browser_V1.5.exe', '');
     DownloadPage.Show;
     try
       try
         DownloadPage.Download;
       except
-        MsgBox('Помилка завантаження: ' + GetExceptionMessage + #13#10 + 
-               'Перевірте інтернет або вимкніть антивірус.', mbCriticalError, MB_OK);
+        MsgBox('Помилка завантаження: ' + GetExceptionMessage + #13#10 + 'Вимкніть антивірус!', mbCriticalError, MB_OK);
         Result := False;
       end;
     finally
@@ -84,12 +80,12 @@ procedure CurStepChanged(CurStep: TSetupStep);
 begin
   if CurStep = ssPostInstall then
   begin
-    if FileExists(ExpandConstant('{tmp}\Kishka-Browser_V1.4.exe')) then
+    if FileExists(ExpandConstant('{tmp}\Kishka-Browser_V1.5.exe')) then
     begin
-      FileCopy(ExpandConstant('{tmp}\Kishka-Browser_V1.4.exe'), ExpandConstant('{app}\Kishka-Browser_V1.4.exe'), False);
+      FileCopy(ExpandConstant('{tmp}\Kishka-Browser_V1.5.exe'), ExpandConstant('{app}\Kishka-Browser_V1.5.exe'), False);
     end else
     begin
-      MsgBox('Помилка: Файл не було завантажено! Можливо, його заблокував антивірус.', mbError, MB_OK);
+      MsgBox('Помилка: Файл не завантажився! Антивірус його заблокував.', mbError, MB_OK);
     end;
   end;
 end;
