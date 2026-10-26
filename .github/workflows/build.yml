@@ -1,4 +1,4 @@
-name: Build Kishka Browser
+name: Build Kishka Browser Setup
 
 on:
   push:
@@ -23,8 +23,8 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    # ---------- Збірка через spec-файл ----------
-    - name: Build EXE with PyInstaller (using spec)
+    # Збірка через spec-файл (безпечно для PowerShell)
+    - name: Build EXE with PyInstaller
       run: pyinstaller main.spec
 
     - name: Install Inno Setup
@@ -34,7 +34,8 @@ jobs:
       run: |
         & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" installer.iss
 
-    - name: Upload Installer
+    # Вивантаження ТІЛЬКИ інсталятора
+    - name: Upload Installer Artifact
       uses: actions/upload-artifact@v4
       with:
         name: Kishka-Browser-V1.4-Setup
