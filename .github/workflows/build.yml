@@ -9,7 +9,7 @@ jobs:
   build-windows:
     runs-on: windows-latest
     permissions:
-      contents: write # Дозвіл на створення Releases
+      contents: write
 
     steps:
     - name: Checkout repository
@@ -28,7 +28,6 @@ jobs:
     - name: Build EXE with PyInstaller
       run: pyinstaller main.spec
 
-    # ⬇️ АВТОМАТИЧНО ЗАВАНТАЖУЄМО ВАЖКИЙ EXE НА GITHUB RELEASES ⬇️
     - name: Upload EXE to GitHub Releases
       uses: softprops/action-gh-release@v1
       with:
@@ -41,7 +40,6 @@ jobs:
     - name: Install Inno Setup
       run: choco install innosetup --no-progress -y
 
-    # ⬇️ ЗБИРАЄМО ЛЕГКИЙ ІНСТАЛЯТОР (він буде важити близько 2 МБ) ⬇️
     - name: Build Web Installer
       run: |
         & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" installer.iss
