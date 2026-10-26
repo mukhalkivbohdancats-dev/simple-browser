@@ -2,13 +2,19 @@ import sys
 import os
 from PyQt5.QtCore import QUrl
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QToolBar, QLineEdit,
-                             QAction, QTabWidget, QStatusBar, QFileDialog,
-                             QMessageBox)
-from PyQt5.QtWebEngineWidgets import (QWebEngineView, QWebEngineProfile,
-                                       QWebEnginePage)
+                             QAction, QTabWidget, QStatusBar, QFileDialog)
+from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEngineProfile
 from PyQt5.QtGui import QIcon
 
-# Папка для завантажень за замовчуванням (створюється автоматично)
+# Функція для пошуку іконки всередині PyInstaller
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
+
+# Папка для завантажень за замовчуванням
 DOWNLOAD_DIR = r"C:\KishkaBrowser\Downloads"
 os.makedirs(DOWNLOAD_DIR, exist_ok=True)
 
@@ -16,12 +22,11 @@ class Browser(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Kishka Browser V1.4")
-        self.setWindowIcon(QIcon("icon.ico"))  # Іконка вікна
+        self.setWindowIcon(QIcon(resource_path("icon.ico")))
         self.resize(1200, 800)
 
-        # --- Налаштування профілю (User-Agent + завантаження) ---
+        # Налаштування профілю (User-Agent та шлях завантажень)
         self.profile = QWebEngineProfile.defaultProfile()
-        # Імітуємо звичайний Chrome на Windows, щоб сайти вважали це ПК
         self.profile.setHttpUserAgent(
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
             "AppleWebKit/537.36 (KHTML, like Gecko) "
@@ -30,7 +35,7 @@ class Browser(QMainWindow):
         self.profile.setDownloadPath(DOWNLOAD_DIR)
         self.profile.downloadRequested.connect(self.handle_download)
 
-        # --- Вкладки ---
+        # Вкладки
         self.tabs = QTabWidget()
         self.tabs.setDocumentMode(True)
         self.tabs.setTabsClosable(True)
@@ -38,7 +43,7 @@ class Browser(QMainWindow):
         self.tabs.currentChanged.connect(self.current_tab_changed)
         self.setCentralWidget(self.tabs)
 
-        # --- Панель навігації ---
+        # Панель навігації
         navtb = QToolBar("Навігація")
         self.addToolBar(navtb)
 
@@ -74,7 +79,6 @@ class Browser(QMainWindow):
         # Відкриваємо стартову сторінку
         self.add_tab(QUrl("https://www.google.com"), "Старт")
 
-    # ---------- Робота з вкладками ----------
     def current_browser(self):
         return self.tabs.currentWidget()
 
@@ -102,7 +106,6 @@ class Browser(QMainWindow):
         self.update_urlbar(qurl, self.current_browser())
         self.setWindowTitle(f"{self.tabs.tabText(i)} — Kishka Browser")
 
-    # ---------- Навігація ----------
     def navigate_home(self):
         self.current_browser().setUrl(QUrl("https://www.google.com"))
 
@@ -123,9 +126,7 @@ class Browser(QMainWindow):
         self.urlbar.setText(q.toString())
         self.urlbar.setCursorPosition(0)
 
-    # ---------- Завантаження файлів ----------
     def handle_download(self, item):
-        # Діалог вибору місця збереження (можна завантажити будь-який формат)
         path, _ = QFileDialog.getSaveFileName(
             self,
             "Зберегти файл",
