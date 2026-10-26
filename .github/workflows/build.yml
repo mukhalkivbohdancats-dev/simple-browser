@@ -22,7 +22,7 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
 
       - name: Auto-Generate Icons
-        run: npx @tauri-apps/cli icon icon.ico
+        run: npx @tauri-apps/cli icon icon.ico --fit cover
 
       - name: Build Tauri App
         run: npx @tauri-apps/cli build
