@@ -3,7 +3,7 @@ name: Build Kishka Browser
 on:
   push:
     branches: [ "main" ]
-  workflow_dispatch: # Дозволяє запускати збірку вручну
+  workflow_dispatch:
 
 jobs:
   build-windows:
@@ -18,12 +18,13 @@ jobs:
       with:
         python-version: '3.10'
 
-    - name: Install dependencies
+    - name: Install Python dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: Build EXE with PyInstaller
+    # ---------- 1. Збірка портативного .exe ----------
+    - name: Build portable EXE with PyInstaller
       run: |
         pyinstaller --noconfirm --onefile --windowed ^
           --icon=icon.ico ^
@@ -31,8 +32,24 @@ jobs:
           --add-data "icon.ico;." ^
           main.py
 
-    - name: Upload Artifact
+    # ---------- 2. Встановлення Inno Setup ----------
+    - name: Install Inno Setup
+      run: choco install innosetup --no-progress -y
+
+    # ---------- 3. Збірка інсталятора ----------
+    - name: Build Installer with Inno Setup
+      run: |
+        & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" installer.iss
+
+    # ---------- 4. Вивантаження артефактів ----------
+    - name: Upload Portable EXE
       uses: actions/upload-artifact@v4
       with:
-        name: Kishka-Browser-V1.4
+        name: Kishka-Browser-V1.4-Portable
         path: dist/Kishka-Browser_V1.4.exe
+
+    - name: Upload Installer
+      uses: actions/upload-artifact@v4
+      with:
+        name: Kishka-Browser-V1.4-Setup
+        path: installer/Kishka-Browser_V1.4_Setup.exe
