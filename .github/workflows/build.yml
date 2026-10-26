@@ -1,4 +1,4 @@
-name: Build Kishka Browser Setup
+name: Build Kishka Browser Web Setup
 
 on:
   push:
@@ -8,6 +8,8 @@ on:
 jobs:
   build-windows:
     runs-on: windows-latest
+    permissions:
+      contents: write # Дозвіл на створення Releases
 
     steps:
     - name: Checkout repository
@@ -23,18 +25,27 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    # Збірка через spec-файл (безпечно для PowerShell)
     - name: Build EXE with PyInstaller
       run: pyinstaller main.spec
+
+    # ⬇️ АВТОМАТИЧНО ЗАВАНТАЖУЄМО ВАЖКИЙ EXE НА GITHUB RELEASES ⬇️
+    - name: Upload EXE to GitHub Releases
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: v1.4
+        files: dist/Kishka-Browser_V1.4.exe
+        overwrite: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Install Inno Setup
       run: choco install innosetup --no-progress -y
 
-    - name: Build Installer with Inno Setup
+    # ⬇️ ЗБИРАЄМО ЛЕГКИЙ ІНСТАЛЯТОР (він буде важити близько 2 МБ) ⬇️
+    - name: Build Web Installer
       run: |
         & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" installer.iss
 
-    # Вивантаження ТІЛЬКИ інсталятора
     - name: Upload Installer Artifact
       uses: actions/upload-artifact@v4
       with:
